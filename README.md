@@ -5,7 +5,7 @@ This project demonstrates the creation of a streaming data pipeline using AWS Ki
 
 ## Milestone 1: Create an Amazon Kinesis Data Stream
 - Created an S3 bucket and deployed a Kinesis stack using CloudFormation templates.
-- Managed ring deployment environments (e.g., staging vs prd).
+- Managed ring deployment environments (e.g., `staging` vs `prd`).
 
 ## Milestone 2: Create an Amazon Kinesis Delivery Stream
 - Developed a Python script for a Lambda function to generate random events.
