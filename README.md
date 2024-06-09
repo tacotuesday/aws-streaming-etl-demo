@@ -11,13 +11,15 @@ This project demonstrates the creation of a streaming data pipeline using AWS Ki
 - Developed a Python script for a Lambda function to generate random events.
 - Tested the Lambda function locally using python-lambda-local.
 - Lambda function generated event time, event name, and user ID for each event.
-[Insert screenshot of successful Lambda function test here]
+
+![Successful local Lambda function execution](./img/successful_lambda.png)
 
 ## Milestone 3: Provision an Amazon Redshift Cluster
 - Created a Redshift cluster and an external schema for Kinesis data.
 - Generated and streamed data to Redshift using the Lambda function.
 - Created a materialized view in Redshift for data analysis.
-[Insert screenshot of Redshift materialized view here]
+
+![Materialized Redshift table](./img/redshift_materialized_view.png)
 
 ## Key Learnings
 - Advanced deployment using bash shell and CloudFormation.
