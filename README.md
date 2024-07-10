@@ -1,7 +1,7 @@
 # Streaming Data Pipeline with AWS Kinesis and Redshift
 
 ## Project Overview
-This project demonstrates the creation of a streaming data pipeline using AWS Kinesis and Redshift. The goal was to connect server event streams with a data warehouse solution and transform the data for analytics dashboard creation.
+This project demonstrates the creation of a streaming data pipeline using AWS Kinesis and Redshift. The goal was to connect server event streams with a data warehouse solution and transform the data for analytics dashboard creation. To read more about this project, check out my blog post [Building a Real-Time Data Pipeline with AWS Kinesis and Redshift: Lessons Learned](https://tacotuesday.github.io/projects/building-a-realtime-data-pipeline).
 
 ## Milestone 1: Create an Amazon Kinesis Data Stream
 - Created an S3 bucket and deployed a Kinesis stack using CloudFormation templates.
