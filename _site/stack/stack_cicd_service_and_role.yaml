@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS events_connector data lake stack.
+Parameters:
+
+  ServiceName:
+    Description: ... .
+    Type: String
+    Default: datalake-manager
+  StackPackageS3Key:
+    Type: String
+    Default: events_connector/stack.zip
+  Testing:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true','false']
+  Environment:
+    Type: String
+    Default: 'staging'
+    AllowedValues: ['staging','live','test']
+
+Resources:
+
+  PipelineManagerLambda:
+    Type: AWS::Lambda::Function
+    DeletionPolicy: Delete
+    DependsOn: LambdaPolicy
+    Properties:
+      FunctionName: !Join ['-', [!Ref ServiceName, !Ref Environment] ] # pipeline-manager-staging # !Join [ delimiter, [ comma-delimited list of values ] ]
+      Handler: events_connector/app.lambda_handler
+      Description: Microservice that orchestrates data loading into BigQuery from AWS to BigQuery project your-project-name.schema.
+      Environment:
+        Variables:
+          DEBUG: true
+          LAMBDA_PATH: 'events_connector/'
+          TESTING: !Ref Testing
+          ENV: !Ref Environment
+      Role: !GetAtt LambdaRole.Arn
+      Code:
+        S3Bucket: tacotuesday-s3-bucket
+        # S3Key: events_connector/stack.zip
+        S3Key:
+          Ref: StackPackageS3Key
+      Runtime: python3.8
+      Timeout: 360
+      MemorySize: 128
+      Tags:
+        -
+          Key: Service
+          Value: Datalake
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+
+  LambdaPolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: LambdaRole
+    Properties:
+      Roles:
+        - !Ref LambdaRole
+      PolicyName: 'pipeline-manager-lambda-policy'
+      PolicyDocument:
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents"
+                    ],
+                    "Resource": "*"
+                }
+            ]
+        }
