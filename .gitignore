@@ -1,0 +1,6 @@
+
+# Environment files with sensitive values (not committed)
+.env
+
+# Secret/environment files with credentials or config that shouldn't be in git
+secrets.env*

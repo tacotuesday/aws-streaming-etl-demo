@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 # chmod +x ./deploy_live.sh
 # Run ./deploy_live.sh
-PROFILE=grafton
-STACK_NAME=YourStackNameLive
-LAMBDA_BUCKET=tacotuesday-s3-bucket
+
+# Load credentials from secrets file if available
+if [ -f "$HOME/.aws/secrets.env" ]; then
+  source $HOME/.aws/secrets.env
+elif [ -f "../../.env" ]; then
+  source ../../.env
+fi
+
+PROFILE="${AWS_PROFILE:-grafton}"
+STACK_NAME="${STACK_NAME:-YourStackNameLive}"
+LAMBDA_BUCKET="${LAMBDA_CODE_BUCKET:-tacotuesday-s3-bucket}"
  
 date
 TIME=`date +"%Y%m%d%H%M%S"`

@@ -15,7 +15,7 @@ Parameters:
     Description: The password associated with admin user.
     Type: String
     NoEcho: 'true'
-    Default: Admin123
+    # No default - provide at deployment time via CloudFormation parameter overrides or .env file
     MinLength: 8
     MaxLength: 64
     # AllowedPattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\x00-\x20\x22\x27\x2f\x40\x5c\x7f-\uffff]+'
@@ -43,7 +43,7 @@ Parameters:
   PubliclyAccessible:
     Description: Redshift Serverless instance to be publicly accessible.
     Type: String
-    Default: true
+    Default: false
     AllowedValues:
       - true
       - false
@@ -141,22 +141,31 @@ Resources:
         Statement:
           -
             Effect: Allow
-            Action: s3:ListAllMyBuckets
-            Resource: arn:aws:s3:::*
-          -
-            Effect: Allow
             Action:
               - 's3:Get*'
               - 's3:List*'
-            Resource: '*'
+            Resource:
+              - 'arn:aws:s3:::*tacotuesday*'/*
+              - 'arn:aws:s3:::*redshift*'/*
           -
             Effect: Allow
-            Action: cloudwatch:*
-            Resource: "*"
+            Action:
+              - cloudwatch:PutMetricData
+              - cloudwatch:PutMetricAlarm
+              - cloudwatch:GetMetricData
+              - cloudwatch:ListMetrics
+            Resource:
+              - 'arn:aws:cloudwatch:*:*:*'
+              - 'arn:aws:logs:*:*:*'
           -
             Effect: Allow
-            Action: kinesis:*
-            Resource: "*"
+            Action:
+              - kinesis:PutRecord
+              - kinesis:PutRecords
+              - kinesis:GetShardIterator
+              - kinesis:GetRecords
+            Resource:
+              - '!Sub arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/tacotuesday-*'
       Roles:
         - !Ref RedshiftAccessRole
   RedshiftServerlessNamespace:
